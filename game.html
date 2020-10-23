@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Mario PANG</title>
 </head>
-<body>
+<!-- style="background-color: black;" -->
+<body >
     
     <div style = "text-align:center">
         
-        <canvas id="myCanvas" width="750" height="500" style="border:solid 15px black">
+        <canvas id="myCanvas" width="750" height="500" style="border:solid 20px black">
             Your browser does not support HTML5 Canvas.
             
         </canvas>
@@ -30,8 +31,9 @@
         
         function render() {
 			ctx.clearRect(0, 0, W, H);
-            
-            ctx.drawImage(bgImage,0, 0, 750, 555, 0, 0, W, H);
+            ctx.fillStyle="black";
+            ctx.fillRect(0, 0, W, H);
+            ctx.drawImage(bgImage,0, 0, 750, 555, 0, 0, W, H-50);
             
             
            
