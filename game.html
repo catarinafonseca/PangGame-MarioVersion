@@ -28,6 +28,9 @@
         bgImage.onload = function () {
 			setInterval(render, 100); //start animation AFTER image load! - 15 fps
         };
+
+        let x = W/2, y = H/2;
+        let rightKey = leftKey =  false;
         
         function render() {
 			ctx.clearRect(0, 0, W, H);
@@ -36,8 +39,20 @@
             ctx.drawImage(bgImage,0, 0, 750, 555, 0, 0, W+50, H-50);
             
             
-           
+            
+            window.requestAnimationFrame(render)
 		}
+        
+        function ArrowReleased(e){
+            if (e.key == 'ArrowRight')
+                rightKey = false
+            if (e.key == 'ArrowLeft')
+                leftKey = false
+        }
+
+        window.addEventListener('keydown', ArrowPressed)
+        window.addEventListener('keyup',ArrowReleased)
+
 
     </script>
 </body>
