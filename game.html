@@ -41,7 +41,10 @@
 
         let x = W-450, y = H-160;
         let rightKey = leftKey =  false;
-        let frameIndex = 0
+        let frameIndex = 0;
+        let rightIndex=0;
+        let leftIndex=0;
+
 
         
         function render() {
@@ -59,12 +62,19 @@
             
             
             if(rightKey && x < W - 65){
-                ctx.drawImage(luigiRight,x,y,130,70);
-                x = x + 0.03
+                ctx.drawImage(luigiRight,rightIndex*29,0,29,30,x,y,60,70);
+                x = x + 0.04;
+                rightIndex++;
+			    if (rightIndex == 3)
+                rightIndex = 0;
+               
             }
             if(leftKey && x >= -5){
-               ctx.drawImage(luigiLeft,x,y,130,70);
-                x = x - 0.03
+                ctx.drawImage(luigiLeft,leftIndex*29,0,29,30,x,y,60,70);
+                x = x - 0.04;
+                leftIndex++;
+			    if (leftIndex == 3)
+                leftIndex = 0;
             }
                 
             
