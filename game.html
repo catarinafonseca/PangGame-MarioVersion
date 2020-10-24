@@ -27,13 +27,19 @@
         let heartImage= new Image();
         bgImage.src = 'images/bg4.png';
         heartImage.src='images/heart.png'
+        
+        let luigiLeft = new Image();
+        let luigiRight = new Image();
+        luigiRight.src = 'images/luigi1.png'
+        luigiLeft.src='images/luigi2.png'
 
         bgImage.onload = function () {
 			setInterval(render, 100); //start animation AFTER image load! - 15 fps
         };
 
-        let x = W-400, y = H-150;
+        let x = W-450, y = H-160;
         let rightKey = leftKey =  false;
+        let frameIndex = 0
         
         function render() {
 			ctx.clearRect(0, 0, W, H);
@@ -44,16 +50,21 @@
             ctx.drawImage(heartImage,W-50,H-45,50,50);
             ctx.drawImage(heartImage,W-100,H-45,50,50);
             ctx.drawImage(heartImage,W-150,H-45,50,50);
-            ctx.drawImage(heartImage,x,y,70,70);
             ctx.fillStyle = "white";
             ctx.font = "30px Courier New ";
             ctx.fillText("Lives:", W-255, H-11);
             
-            if(rightKey && x < W - 65)
+            if(rightKey && x < W - 65){
+                ctx.drawImage(luigiRight,x,y,130,70);
                 x = x + 0.03
-            if(leftKey && x > -5)
+            }
+            if(leftKey && x >= -5){
+                ctx.drawImage(luigiLeft,x,y,130,70);
                 x = x - 0.03
-                window.setInterval(render,1000/60)
+            }
+                
+            
+            window.setInterval(render,1000/60)
 		}
         
         render();
@@ -67,8 +78,12 @@
         function ArrowReleased(e){
             if (e.key == 'ArrowRight')
                 rightKey = false
-            if (e.key == 'ArrowLeft')
+            if (e.key == 'ArrowLeft'){
+                ctx.drawImage(luigiLeft,x,y,130,70);
                 leftKey = false
+                
+            }
+                
         }
 
         window.addEventListener('keydown', ArrowPressed)
