@@ -30,8 +30,10 @@
         
         let luigiLeft = new Image();
         let luigiRight = new Image();
+        let luigiBack = new Image();
         luigiRight.src = 'images/luigi1.png'
         luigiLeft.src='images/luigi2.png'
+        luigiBack.src='iamges/.png'
 
         bgImage.onload = function () {
 			setInterval(render, 100); //start animation AFTER image load! - 15 fps
@@ -40,6 +42,7 @@
         let x = W-450, y = H-160;
         let rightKey = leftKey =  false;
         let frameIndex = 0
+
         
         function render() {
 			ctx.clearRect(0, 0, W, H);
@@ -54,12 +57,13 @@
             ctx.font = "30px Courier New ";
             ctx.fillText("Lives:", W-255, H-11);
             
+            
             if(rightKey && x < W - 65){
                 ctx.drawImage(luigiRight,x,y,130,70);
                 x = x + 0.03
             }
             if(leftKey && x >= -5){
-                ctx.drawImage(luigiLeft,x,y,130,70);
+               ctx.drawImage(luigiLeft,x,y,130,70);
                 x = x - 0.03
             }
                 
@@ -79,7 +83,6 @@
             if (e.key == 'ArrowRight')
                 rightKey = false
             if (e.key == 'ArrowLeft'){
-                ctx.drawImage(luigiLeft,x,y,130,70);
                 leftKey = false
                 
             }
