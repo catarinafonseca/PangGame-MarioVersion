@@ -32,7 +32,7 @@
 			setInterval(render, 100); //start animation AFTER image load! - 15 fps
         };
 
-        let x = W/2, y = H/2;
+        let x = W-400, y = H-150;
         let rightKey = leftKey =  false;
         
         function render() {
@@ -44,15 +44,26 @@
             ctx.drawImage(heartImage,W-50,H-45,50,50);
             ctx.drawImage(heartImage,W-100,H-45,50,50);
             ctx.drawImage(heartImage,W-150,H-45,50,50);
+            ctx.drawImage(heartImage,x,y,70,70);
             ctx.fillStyle = "white";
             ctx.font = "30px Courier New ";
             ctx.fillText("Lives:", W-255, H-11);
             
-            
-            
-            window.requestAnimationFrame(render)
+            if(rightKey && x < W - 65)
+                x = x + 0.03
+            if(leftKey && x > -5)
+                x = x - 0.03
+                window.setInterval(render,1000/60)
 		}
         
+        render();
+        
+        function ArrowPressed(e){
+            if (e.key == 'ArrowRight')
+                rightKey = true
+            if (e.key == 'ArrowLeft')
+                leftKey = true
+        }
         function ArrowReleased(e){
             if (e.key == 'ArrowRight')
                 rightKey = false
