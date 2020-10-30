@@ -85,23 +85,36 @@
                 ctx.drawImage(luigiBack, x, y, 33, 70);
             }
 
-            if (rightKey && x < W - 65) {
-               
+            if (rightKey && x < W - 50) {
                 ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
-                x = x + 4;
+                x = x + 8;
                 rightIndex++;
                 if (rightIndex == 3)
                     rightIndex = 0;
 
             }
-            if (leftKey && x >= -5) {
-                
+            if(rightKey && x == W - 50){ //andar contra a parede direita
+                ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
+                rightIndex++;
+                if(rightIndex == 3)
+                    rightIndex = 0
+                    
+            }
+            if (leftKey && x > 0) { 
                 ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
-                x = x - 4;
+                x = x - 8;
                 leftIndex++;
                 if (leftIndex == 3)
                     leftIndex = 0;
+                
 
+            }
+            if(leftKey && x == 0){ //andar contra a parede esquerda
+                console.log('entrou');
+                ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
+                leftIndex++;
+                if (leftIndex == 3)
+                    leftIndex = 0;
             }
             ctx.beginPath();
             ball = ctx.drawImage(coinImage, frameIndex * 100, 0, 100, 100,
