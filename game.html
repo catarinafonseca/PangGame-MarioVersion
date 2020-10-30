@@ -23,7 +23,8 @@
         const ctx = canvas.getContext("2d");
 
         const W = canvas.width, H = canvas.height;
-        //declaração das imagens
+
+
         let bgImage = new Image();
         let heartImage = new Image();
         let coinImage = new Image();
@@ -38,7 +39,14 @@
         luigiLeft.src = 'images/luigi2.png'
         luigiBack.src = 'images/luigi7.png'
 
-        //declaração das variáveis
+        /* bgImage.onload = function () {
+            setInterval(render, 100); //start animation AFTER image load! - 15 fps
+        }; */
+
+        
+
+
+
         let x = W - 450, y = H - 160;
         let rightKey = leftKey = false;
         let frameIndex = 0;
@@ -50,38 +58,41 @@
         let ballW = 50;
         let ballH = 50;
         let direction = Math.random() * 2 * Math.PI;
+
         var vx = 5 * Math.cos(direction);
         var vy = 5 * Math.sin(direction);
 
+
         function render() {
-            //clear
             ctx.clearRect(0, 0, W, H);
-            //fundo preto
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, W, H);
-            //desenho do fundo e das vidas
+
             ctx.drawImage(bgImage, 0, 0, 750, 555, 0, 0, W + 50, H - 50);
             ctx.drawImage(heartImage, W - 50, H - 45, 50, 50);
             ctx.drawImage(heartImage, W - 100, H - 45, 50, 50);
             ctx.drawImage(heartImage, W - 150, H - 45, 50, 50);
-            //texto
+           
+
+
+
             ctx.fillStyle = "white";
             ctx.font = "30px Courier New ";
             ctx.fillText("Lives:", W - 255, H - 11);
 
-            //condição se não tiver pressionado leftKey ou rightKey aparece de costas
+
             if(!rightKey && !leftKey){
                 ctx.drawImage(luigiBack, x, y, 33, 70);
             }
-            //condição se tiver pressionado rightKey 
-           if (rightKey && x < W - 50) {
+
+            if (rightKey && x < W - 50) {
                 ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
                 x = x + 8;
                 rightIndex++;
                 if (rightIndex == 3)
                     rightIndex = 0;
+
             }
-            
             if(rightKey && x == W - 50){ //andar contra a parede direita
                 ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
                 rightIndex++;
@@ -89,24 +100,23 @@
                     rightIndex = 0
                     
             }
-            
-            //condição se  tiver pressionado leftKey 
-            if (leftKey && x > 0) { 
+            if (leftKey && x > 4) { 
                 ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
                 x = x - 8;
                 leftIndex++;
                 if (leftIndex == 3)
                     leftIndex = 0;
+                
+
             }
-            
-            if(leftKey && x == 0){ //andar contra a parede esquerda
+            if(leftKey && x == 4){ //andar contra a parede esquerda
                 console.log('entrou');
                 ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
                 leftIndex++;
                 if (leftIndex == 3)
                     leftIndex = 0;
+
             }
-            //desenho da moeda
             ctx.beginPath();
             ball = ctx.drawImage(coinImage, frameIndex * 100, 0, 100, 100,
                 ballX, ballY, ballW, ballH);
@@ -116,27 +126,46 @@
             ctx.closePath();
 
             ballMovement();
+
+            /* window.requestAnimationFrame(render) */
         }
 
+        /* render(); */
+
          setInterval(render, 1000 / 20); 
-        //movimento da moeda
+        
+
         function ballMovement() {
+            
 
             ballX += vx;
             ballY += vy;
             
+            
+            
+
             if (ballX + ballW > W || ballX< 0) {
+
                 vx = -vx;
-            }     
-            if (ballY + ballH > H - 90 ) {
-                ballY = H - ballH - 90;
-                vy = -vy;
+
             }
-            if (ballY< 0){
+
+            if (ballY + ballH > H - 90 ) {
+
+
+                ballY = H - ballH - 90;
+
                 vy = -vy;
-            } 
+
+            }
+            if (ballY< 0) {
+       
+                vy = -vy;
+
+            }
+
         }
-        //controlo da interação do keyboard
+
         function ArrowPressed(e) {
             if (e.key == 'ArrowRight')
                 rightKey = true
@@ -146,13 +175,18 @@
         function ArrowReleased(e) {
             if (e.key == 'ArrowRight')
                 rightKey = false
-            if (e.key == 'ArrowLeft')
+            if (e.key == 'ArrowLeft') {
                 leftKey = false
+
+            }
 
         }
 
         window.addEventListener('keydown', ArrowPressed)
         window.addEventListener('keyup', ArrowReleased)
+
+
+
 
     </script>
 </body>
