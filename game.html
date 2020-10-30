@@ -1,113 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Mario PANG</title>
 </head>
 <!-- style="background-color: black;" -->
-<body >
-    
-    <div style = "text-align:center">
-        
+
+<body>
+
+    <div style="text-align:center">
+
         <canvas id="myCanvas" width="750" height="500" style="border:solid 20px black">
             Your browser does not support HTML5 Canvas.
-            
+
         </canvas>
-        
+
     </div>
     <script>
         const canvas = document.querySelector('#myCanvas');
-		const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d");
 
-		const W = canvas.width, H = canvas.height;
+        const W = canvas.width, H = canvas.height;
 
-		
+
         let bgImage = new Image();
-        let heartImage= new Image();
+        let heartImage = new Image();
+        let coinImage = new Image();
         bgImage.src = 'images/bg4.png';
-        heartImage.src='images/heart.png'
-        
+        heartImage.src = 'images/heart.png'
+        coinImage.src = 'images/coin.png';
+
         let luigiLeft = new Image();
         let luigiRight = new Image();
         let luigiBack = new Image();
         luigiRight.src = 'images/luigi1.png'
-        luigiLeft.src='images/luigi2.png'
-        luigiBack.src='images/luigi7.png'
+        luigiLeft.src = 'images/luigi2.png'
+        luigiBack.src = 'images/luigi7.png'
 
-        bgImage.onload = function () {
-			setInterval(render, 100); //start animation AFTER image load! - 15 fps
-        };
-
-        let x = W-450, y = H-160;
-        let rightKey = leftKey =  false;
-        let frameIndex = 0;
-        let rightIndex=0;
-        let leftIndex=0;
-
+        /* bgImage.onload = function () {
+            setInterval(render, 100); //start animation AFTER image load! - 15 fps
+        }; */
 
         
+
+
+
+        let x = W - 450, y = H - 160;
+        let rightKey = leftKey = false;
+        let frameIndex = 0;
+        let rightIndex = 0;
+        let leftIndex = 0;
+        let ball;
+        let ballX = W/2;
+        let ballY = 50;
+        let ballW = 50;
+        let ballH = 50;
+        let direction = Math.random() * 2 * Math.PI;
+
+        var vx = 5 * Math.cos(direction);
+        var vy = 5 * Math.sin(direction);
+
+
         function render() {
-			ctx.clearRect(0, 0, W, H);
-            ctx.fillStyle="black";
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = "black";
             ctx.fillRect(0, 0, W, H);
-            
-            ctx.drawImage(bgImage,0, 0, 750, 555, 0, 0, W+50, H-50);
-            ctx.drawImage(heartImage,W-50,H-45,50,50);
-            ctx.drawImage(heartImage,W-100,H-45,50,50);
-            ctx.drawImage(heartImage,W-150,H-45,50,50);
-            ctx.drawImage(luigiBack,x,y,33,70);
+
+            ctx.drawImage(bgImage, 0, 0, 750, 555, 0, 0, W + 50, H - 50);
+            ctx.drawImage(heartImage, W - 50, H - 45, 50, 50);
+            ctx.drawImage(heartImage, W - 100, H - 45, 50, 50);
+            ctx.drawImage(heartImage, W - 150, H - 45, 50, 50);
+           
+
+
+
             ctx.fillStyle = "white";
             ctx.font = "30px Courier New ";
-            ctx.fillText("Lives:", W-255, H-11);
-            
-            
-            if(rightKey && x < W - 65){
-                ctx.drawImage(bgImage,0, 0, 750, 555, 0, 0, W+50, H-50);
-                ctx.drawImage(luigiRight,rightIndex*29,0,29,30,x,y,60,70);
-                x = x + 0.04;
-                rightIndex++;
-			    if (rightIndex == 3)
-                rightIndex = 0;
+            ctx.fillText("Lives:", W - 255, H - 11);
+
+
+            if(!rightKey && !leftKey){
+                ctx.drawImage(luigiBack, x, y, 33, 70);
+            }
+
+            if (rightKey && x < W - 65) {
                
+                ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
+                x = x + 4;
+                rightIndex++;
+                if (rightIndex == 3)
+                    rightIndex = 0;
+
             }
-            if(leftKey && x >= -5){
-                ctx.drawImage(bgImage,0, 0, 750, 555, 0, 0, W+50, H-50);
-                ctx.drawImage(luigiLeft,leftIndex*29,0,29,30,x,y,60,70);
-                x = x - 0.04;
-                leftIndex++;
-			    if (leftIndex == 3)
-                leftIndex = 0;
-            }
+            if (leftKey && x >= -5) {
                 
+                ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
+                x = x - 4;
+                leftIndex++;
+                if (leftIndex == 3)
+                    leftIndex = 0;
+
+            }
+            ctx.beginPath();
+            ball = ctx.drawImage(coinImage, frameIndex * 100, 0, 100, 100,
+                ballX, ballY, ballW, ballH);
+            frameIndex++;
+            if (frameIndex == 10)
+                frameIndex = 0;
+            ctx.closePath();
+
+            ballMovement();
+
+            /* window.requestAnimationFrame(render) */
+        }
+
+        /* render(); */
+
+         setInterval(render, 1000 / 20); 
+        
+
+        function ballMovement() {
             
-            window.setInterval(render,1000/60)
-		}
-        
-        render();
-        
-        function ArrowPressed(e){
+
+            ballX += vx;
+            ballY += vy;
+            
+            
+            
+
+            if (ballX + ballW > W || ballX< 0) {
+
+                vx = -vx;
+
+            }
+
+            if (ballY + ballH > H - 90 ) {
+
+
+                ballY = H - ballH - 90;
+
+                vy = -vy;
+
+            }
+            if (ballY< 0) {
+       
+                vy = -vy;
+
+            }
+
+        }
+
+        function ArrowPressed(e) {
             if (e.key == 'ArrowRight')
                 rightKey = true
             if (e.key == 'ArrowLeft')
                 leftKey = true
         }
-        function ArrowReleased(e){
+        function ArrowReleased(e) {
             if (e.key == 'ArrowRight')
                 rightKey = false
-            if (e.key == 'ArrowLeft'){
+            if (e.key == 'ArrowLeft') {
                 leftKey = false
-                
+
             }
-                
+
         }
 
         window.addEventListener('keydown', ArrowPressed)
-        window.addEventListener('keyup',ArrowReleased)
+        window.addEventListener('keyup', ArrowReleased)
 
 
-        
+
 
     </script>
 </body>
+
 </html>
