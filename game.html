@@ -24,7 +24,7 @@
 
         const W = canvas.width, H = canvas.height;
 
-
+        //declaração das imagens
         let bgImage = new Image();
         let heartImage = new Image();
         let coinImage = new Image();
@@ -40,7 +40,7 @@
         luigiBack.src = 'images/luigi7.png'
 
         let x = W - 450, y = H - 160;
-        let rightKey = leftKey = false;
+        let rightKey = leftKey = upKey = false;
         let frameIndex = 0;
         let rightIndex = 0;
         let leftIndex = 0;
@@ -111,6 +111,7 @@
 
         function render() {
             ctx.clearRect(0, 0, W, H);
+            //fundo preto
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, W, H);
             ctx.drawImage(bgImage, 0, 0, 750, 555, 0, 0, W + 50, H - 50);
@@ -133,7 +134,6 @@
                 rightIndex++;
                 if (rightIndex == 3)
                     rightIndex = 0;
-
             }
 
             if (rightKey && x == W - 50) {
@@ -192,19 +192,16 @@
         function ArrowReleased(e) {
             if (e.key == 'ArrowRight')
                 rightKey = false
-            if (e.key == 'ArrowLeft') {
+            if (e.key == 'ArrowLeft') 
                 leftKey = false
+            if (e.key == 'ArrowUp') 
+                upKey = false
 
-            }
 
         }
 
         window.addEventListener('keydown', ArrowPressed)
         window.addEventListener('keyup', ArrowReleased)
-
-
-
-
     </script>
 </body>
 
