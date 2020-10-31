@@ -75,14 +75,14 @@
                 ctx.drawImage(luigiBack, x, y, 33, 70);
             }
             //andar para a direita
-            if (rightKey && x < W - 50) {
+            if (rightKey && x < W - 58) {
                 ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
                 x = x + 8;
                 rightIndex++;
                 if (rightIndex == 3)
                     rightIndex = 0;
             }
-            if(rightKey && x == W - 50){ //andar contra a parede direita
+            if(rightKey && x == W - 58){ //andar contra a parede direita
                 ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
                 rightIndex++;
                 if(rightIndex == 3)
