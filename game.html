@@ -39,17 +39,23 @@
         luigiLeft.src = 'images/luigi2.png'
         luigiBack.src = 'images/luigi7.png'
 
+        let turtle = new Image();
+        turtle.src = 'images/turtle.png'
+
         //declaração das variáveis
         let x = W - 450, y = H - 160;
         let rightKey = leftKey = upKey = false;
         let frameIndex = 0;
         let rightIndex = 0;
         let leftIndex = 0;
+        let upIndex = 0;
         let ball;
         let ballX = W/2;
         let ballY = 50;
         let ballW = 50;
         let ballH = 50;
+        let turtleX;
+        let turtleY;
         let direction = Math.random() * 2 * Math.PI;
         var vx = 5 * Math.cos(direction);
         var vy = 5 * Math.sin(direction);
@@ -102,6 +108,14 @@
                 leftIndex++;
                 if (leftIndex == 3)
                     leftIndex = 0;
+
+            }
+            if(upKey){  //mandar o arpão
+                turtleX = x;
+                turtleY = y;
+                ctx.drawImage(turtle, 0, 0, 29, 30, turtleX, turtleY - 38, 60, 70);
+                turtleY = turtleY - 10;
+
 
             }
             //desenho da moeda
