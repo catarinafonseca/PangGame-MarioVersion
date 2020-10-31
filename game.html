@@ -138,18 +138,26 @@
 
         //controlo das interações do keyboard
         function ArrowPressed(e) {
-            if (e.key == 'ArrowRight')
+            if (e.key == 'ArrowRight'){
                 rightKey = true
-            if (e.key == 'ArrowLeft')
-                leftKey = true
+                leftKey = false
+            }
+                
+            if (e.key == 'ArrowLeft'){
+                rightKey = false
+                leftKey = true 
+            }  
+            if (e.key == 'ArrowUp')
+                upKey = true
         }
         function ArrowReleased(e) {
             if (e.key == 'ArrowRight')
                 rightKey = false
-            if (e.key == 'ArrowLeft') {
+            if (e.key == 'ArrowLeft') 
                 leftKey = false
+            if (e.key == 'ArrowUp') 
+                upKey = false
 
-            }
 
         }
 
