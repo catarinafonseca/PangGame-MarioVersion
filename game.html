@@ -39,26 +39,74 @@
         luigiLeft.src = 'images/luigi2.png'
         luigiBack.src = 'images/luigi7.png'
 
-        let turtle = new Image();
-        turtle.src = 'images/turtle.png'
-
-        //declaração das variáveis
         let x = W - 450, y = H - 160;
         let rightKey = leftKey = upKey = false;
         let frameIndex = 0;
         let rightIndex = 0;
         let leftIndex = 0;
-        let upIndex = 0;
-        let ball;
-        let ballX = W/2;
-        let ballY = 50;
-        let ballW = 50;
-        let ballH = 50;
-        let turtleX;
-        let turtleY;
-        let direction = Math.random() * 2 * Math.PI;
-        var vx = 5 * Math.cos(direction);
-        var vy = 5 * Math.sin(direction);
+        let gravity = 0.5
+        let bounce = 0.7
+        class Coin {
+            constructor(ballX, ballY, ballW, ballH, v, d) {
+                this.ballX = ballX;
+                this.ballY = ballY;
+                this.ballW = ballW;
+                this.ballH = ballH;
+                this.dX = 5 * Math.cos(d);
+                this.dY = 5 * Math.sin(d);
+                this.v = v;
+
+            }
+            update() {
+
+                this.ballX += this.dX;
+                this.ballY += this.dY;
+                this.dY += gravity
+
+
+
+                if (this.ballX + this.ballW > W || this.ballX < 0) {
+                    this.dX = -this.dX;
+                }
+                if (this.ballY + this.ballH > H - 90) {
+                    this.ballY = H - this.ballH - 90;
+                     this.dY *= -bounce; 
+
+
+                }
+                if (this.ballY <= 0) {
+                    this.dY += -this.dY;
+
+                }
+                 if (this.dY < 0 && this.dY > -2.1) {
+
+                    this.dY = 0;
+                    
+                }  
+
+              
+            }
+
+            draw() {
+
+                ctx.beginPath();
+                ctx.drawImage(coinImage, frameIndex * 100, 0, 100, 100,
+                    this.ballX, this.ballY, this.ballW, this.ballH);
+                frameIndex++;
+                if (frameIndex == 10)
+                    frameIndex = 0;
+                ctx.closePath();
+            }
+
+        }
+
+        let b = new Array();
+        let xInit = W / 2;
+        let yInit = H / 4;
+        let velocity = 5;
+        let direction = Math.random() * 2 * Math.PI
+
+        b.push(new Coin(xInit, yInit, 50, 50, velocity, direction))
 
 
         function render() {
@@ -66,45 +114,52 @@
             //fundo preto
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, W, H);
-            //desenho do background e das vidas
             ctx.drawImage(bgImage, 0, 0, 750, 555, 0, 0, W + 50, H - 50);
             ctx.drawImage(heartImage, W - 50, H - 45, 50, 50);
             ctx.drawImage(heartImage, W - 100, H - 45, 50, 50);
             ctx.drawImage(heartImage, W - 150, H - 45, 50, 50);
-           //texto
             ctx.fillStyle = "white";
             ctx.font = "30px Courier New ";
             ctx.fillText("Lives:", W - 255, H - 11);
 
-            //ficar parado
-            if(!rightKey && !leftKey){
+
+            if (!rightKey && !leftKey) {
                 ctx.drawImage(luigiBack, x, y, 33, 70);
             }
-            //andar para a direita
-            if (rightKey && x < W - 58) {
+
+            if (rightKey && x < W - 50) {
+
                 ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
                 x = x + 8;
                 rightIndex++;
                 if (rightIndex == 3)
                     rightIndex = 0;
             }
-            if(rightKey && x == W - 58){ //andar contra a parede direita
+
+            if (rightKey && x == W - 50) {
+
                 ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
+
                 rightIndex++;
-                if(rightIndex == 3)
-                    rightIndex = 0     
+                if (rightIndex == 3)
+                    rightIndex = 0;
+
             }
-            //andar para a esquerda
-            if (leftKey && x > 4) { 
+
+            if (leftKey && x > 4) {
+
                 ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
                 x = x - 8;
                 leftIndex++;
                 if (leftIndex == 3)
                     leftIndex = 0;
+
             }
-            if(leftKey && x == 4){ //andar contra a parede esquerda
-                console.log('entrou');
+
+            if (leftKey && x == 4) {
+
                 ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
+
                 leftIndex++;
                 if (leftIndex == 3)
                     leftIndex = 0;
@@ -117,52 +172,27 @@
                 turtleY--;
 
 
-            }
-            //desenho da moeda
-            ctx.beginPath();
-            ball = ctx.drawImage(coinImage, frameIndex * 100, 0, 100, 100,
-                ballX, ballY, ballW, ballH);
-            frameIndex++;
-            if (frameIndex == 10)
-                frameIndex = 0;
-            ctx.closePath();
+            b.forEach(function (coin) {
+                coin.draw();
+                coin.update();
+            });
 
-            ballMovement();
-        }
-
-        setInterval(render, 1000 / 20); 
-        
-        function ballMovement() { //movimento da moeda
- 
-            ballX += vx;
-            ballY += vy;
-            
-            if (ballX + ballW > W || ballX< 0) {
-                vx = -vx;
-            }
-            if (ballY + ballH > H - 90 ) {
-                ballY = H - ballH - 90;
-                vy = -vy;
-            }
-            if (ballY< 0) {
-                vy = -vy;
-            }
 
         }
 
-        //controlo das interações do keyboard
+        setInterval(render, 1000 / 20);
+
         function ArrowPressed(e) {
-            if (e.key == 'ArrowRight'){
+            if (e.key == 'ArrowRight') {
                 rightKey = true
                 leftKey = false
             }
-                
-            if (e.key == 'ArrowLeft'){
+
+            if (e.key == 'ArrowLeft') {
+                leftKey = true
                 rightKey = false
-                leftKey = true 
-            }  
-            if (e.key == 'ArrowUp')
-                upKey = true
+            }
+
         }
         function ArrowReleased(e) {
             if (e.key == 'ArrowRight')
