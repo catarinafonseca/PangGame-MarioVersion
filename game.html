@@ -165,13 +165,14 @@
                     leftIndex = 0;
 
             }
+            
             if(upKey){  //mandar o arpão
                 turtleX = x;
                 turtleY = y;
                 ctx.drawImage(turtle, 0, 0, 29, 30, turtleX, turtleY - 38, 60, 70);
                 turtleY--;
 
-
+            }
             b.forEach(function (coin) {
                 coin.draw();
                 coin.update();
@@ -207,7 +208,7 @@
 
         window.addEventListener('keydown', ArrowPressed)
         window.addEventListener('keyup', ArrowReleased)
-        }
+        
     </script>
 </body>
 
