@@ -39,11 +39,16 @@
         luigiLeft.src = 'images/luigi2.png'
         luigiBack.src = 'images/luigi7.png'
 
+        let turtle = new Image()
+        turtle.src = 'images/turtle.png'
+
         let x = W - 450, y = H - 160;
         let rightKey = leftKey = upKey = false;
         let frameIndex = 0;
         let rightIndex = 0;
         let leftIndex = 0;
+        let turtleX = x;
+        let turtleY = y;
         let gravity = 0.5
         let bounce = 0.7
         class Coin {
@@ -151,6 +156,7 @@
                 ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
                 x = x - 8;
                 leftIndex++;
+                
                 if (leftIndex == 3)
                     leftIndex = 0;
 
@@ -159,29 +165,37 @@
             if (leftKey && x == 4) {
 
                 ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
-
+                
                 leftIndex++;
                 if (leftIndex == 3)
                     leftIndex = 0;
 
             }
             
-            if(upKey){  //mandar o arpão
-                turtleX = x;
-                turtleY = y;
+            if(upKey && turtleY > -1){  //mandar o arpão
+                
                 ctx.drawImage(turtle, 0, 0, 29, 30, turtleX, turtleY - 38, 60, 70);
-                turtleY--;
-
+                turtleY = turtleY - 10
+                console.log(turtleY);
+                
             }
+            if(turtleY == 0){
+                upKey = false
+                turtleY = y
+                turtleX = x
+                console.log(tu);
+                
+            }
+         
+
             b.forEach(function (coin) {
                 coin.draw();
                 coin.update();
             });
 
-
         }
 
-        setInterval(render, 1000 / 20);
+        setInterval(render, 1000/20)
 
         function ArrowPressed(e) {
             if (e.key == 'ArrowRight') {
@@ -193,6 +207,12 @@
                 leftKey = true
                 rightKey = false
             }
+            if (e.key == 'ArrowUp') {
+                upKey = true
+                leftKey = false 
+                rightKey = false
+                
+            }
 
         }
         function ArrowReleased(e) {
@@ -200,9 +220,7 @@
                 rightKey = false
             if (e.key == 'ArrowLeft') 
                 leftKey = false
-            if (e.key == 'ArrowUp') 
-                upKey = false
-
+            
 
         }
 
