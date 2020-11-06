@@ -9,7 +9,6 @@
 <!-- style="background-color: black;" -->
 
 <body>
-
     <div style="text-align:center">
 
         <canvas id="myCanvas" width="750" height="500" style="border:solid 20px black">
@@ -39,56 +38,56 @@
         luigiLeft.src = 'images/luigi2.png'
         luigiBack.src = 'images/luigi7.png'
 
+        let turtle = new Image()
+        turtle.src = 'images/turtle.png'
+
+        //declaração das variáveis
         let x = W - 450, y = H - 160;
         let rightKey = leftKey = upKey = false;
         let frameIndex = 0;
         let rightIndex = 0;
         let leftIndex = 0;
-        let gravity = 0.5
-        let bounce = 0.7
+        let turtleX = x;
+        let turtleY = y;
+        let a = 0.5;
+
+        //classe da moeda
         class Coin {
-            constructor(ballX, ballY, ballW, ballH, v, d) {
+            constructor(ballX, ballY, ballW, ballH) {
                 this.ballX = ballX;
                 this.ballY = ballY;
                 this.ballW = ballW;
                 this.ballH = ballH;
-                this.dX = 5 * Math.cos(d);
-                this.dY = 5 * Math.sin(d);
-                this.v = v;
+                this.dX = 6 * Math.cos(-Math.PI / 3);
+                this.dY = 19 * Math.sin(-Math.PI / 3);
+                
 
             }
-            update() {
+
+            update() { //função do movimento da moeda
 
                 this.ballX += this.dX;
                 this.ballY += this.dY;
-                this.dY += gravity
-
-
 
                 if (this.ballX + this.ballW > W || this.ballX < 0) {
                     this.dX = -this.dX;
                 }
-                if (this.ballY + this.ballH > H - 90) {
-                    this.ballY = H - this.ballH - 90;
-                     this.dY *= -bounce; 
 
-
+                if (this.ballY + this.ballH > H - 95) {
+                    this.ballY = H - this.ballH - 95;
+                    this.dY = -this.dY;
+    
                 }
-                if (this.ballY <= 0) {
-                    this.dY += -this.dY;
-
+                else{
+                     this.dY = this.dY + a; 
                 }
-                 if (this.dY < 0 && this.dY > -2.1) {
 
-                    this.dY = 0;
-                    
-                }  
-
-              
+                   if (this.dY < 0 && this.dY > -2.1) {
+                     this.dY = 0;
+                 }  
             }
 
-            draw() {
-
+            draw() { //desenho da moeda
                 ctx.beginPath();
                 ctx.drawImage(coinImage, frameIndex * 100, 0, 100, 100,
                     this.ballX, this.ballY, this.ballW, this.ballH);
@@ -101,19 +100,20 @@
         }
 
         let b = new Array();
-        let xInit = W / 2;
-        let yInit = H / 4;
-        let velocity = 5;
-        let direction = Math.random() * 2 * Math.PI
-
-        b.push(new Coin(xInit, yInit, 50, 50, velocity, direction))
+        let xInit = 0;
+        let yInit = H - 195;
+        
 
 
-        function render() {
+        b.push(new Coin(xInit, yInit, 100, 100))
+
+
+        function render() { //renderização do jogo
             ctx.clearRect(0, 0, W, H);
             //fundo preto
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, W, H);
+            //desenho do fundo e dos restantes elementos(imagens e texto)
             ctx.drawImage(bgImage, 0, 0, 750, 555, 0, 0, W + 50, H - 50);
             ctx.drawImage(heartImage, W - 50, H - 45, 50, 50);
             ctx.drawImage(heartImage, W - 100, H - 45, 50, 50);
@@ -122,12 +122,12 @@
             ctx.font = "30px Courier New ";
             ctx.fillText("Lives:", W - 255, H - 11);
 
-
-            if (!rightKey && !leftKey) {
+            //conjunto de funções respetivo ao movimento da personagem
+            if (!rightKey && !leftKey) { //caso nenhuma tecla de movimento seja pressionada
                 ctx.drawImage(luigiBack, x, y, 33, 70);
             }
 
-            if (rightKey && x < W - 50) {
+            if (rightKey && x < W - 50) { //caso a tecla da direita seja pressionada
 
                 ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
                 x = x + 8;
@@ -136,47 +136,54 @@
                     rightIndex = 0;
             }
 
-            if (rightKey && x == W - 50) {
+            if (rightKey && x == W - 50) { //evita que a personagem saia da tela do lado direito
 
                 ctx.drawImage(luigiRight, rightIndex * 29, 0, 29, 30, x, y, 60, 70);
-
                 rightIndex++;
                 if (rightIndex == 3)
                     rightIndex = 0;
-
             }
 
-            if (leftKey && x > 4) {
+            if (leftKey && x > 4) { //caso a tecla da esquerda seja pressionada
 
                 ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
                 x = x - 8;
                 leftIndex++;
                 if (leftIndex == 3)
                     leftIndex = 0;
-
             }
 
-            if (leftKey && x == 4) {
+            if (leftKey && x == 4) { //evita que a personagem saia da tela do lado esquerdo
 
                 ctx.drawImage(luigiLeft, leftIndex * 29, 0, 29, 30, x, y, 60, 70);
-
                 leftIndex++;
                 if (leftIndex == 3)
                     leftIndex = 0;
-
             }
 
+            if (upKey && turtleY > -1) { //caso a tecla para cima seja pressionada - mandar o arpão
+
+                ctx.drawImage(turtle, 0, 0, 29, 30, turtleX, turtleY - 38, 60, 70);
+                turtleY = turtleY - 10
+                console.log(turtleY);
+            }
+
+            if (turtleY == 0) { //retorna o arpão à personagem
+
+                upKey = false
+                turtleY = y
+                turtleX = x
+            }
 
             b.forEach(function (coin) {
                 coin.draw();
                 coin.update();
             });
-
-
         }
 
-        setInterval(render, 1000 / 20);
+        setInterval(render, 1000 / 20)
 
+        //conjunto de funções que controlam as teclas quando pressionadas e deixadas de estar pressionadas
         function ArrowPressed(e) {
             if (e.key == 'ArrowRight') {
                 rightKey = true
@@ -188,20 +195,23 @@
                 rightKey = false
             }
 
+            if (e.key == 'ArrowUp') {
+                upKey = true
+                leftKey = false
+                rightKey = false
+            }
         }
+
         function ArrowReleased(e) {
             if (e.key == 'ArrowRight')
                 rightKey = false
-            if (e.key == 'ArrowLeft') 
+            if (e.key == 'ArrowLeft')
                 leftKey = false
-            if (e.key == 'ArrowUp') 
-                upKey = false
-
-
         }
 
         window.addEventListener('keydown', ArrowPressed)
         window.addEventListener('keyup', ArrowReleased)
+
     </script>
 </body>
 
