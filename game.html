@@ -11,7 +11,7 @@
 <body>
     <div style="text-align:center">
 
-        <canvas id="myCanvas" width="750" height="500" style="border:solid 20px black">
+        <canvas id="myCanvas" width="750" height="500" >
             Your browser does not support HTML5 Canvas.
 
         </canvas>
@@ -27,19 +27,25 @@
         let bgImage = new Image();
         let heartImage = new Image();
         let coinImage = new Image();
+        let floor=new Image();
+        floor.src='images/floor.png'
         bgImage.src = 'images/bg4.png';
-        heartImage.src = 'images/heart.png'
+        heartImage.src = 'images/heart.png';
         coinImage.src = 'images/coin.png';
 
         let luigiLeft = new Image();
         let luigiRight = new Image();
         let luigiBack = new Image();
-        luigiRight.src = 'images/luigi1.png'
-        luigiLeft.src = 'images/luigi2.png'
-        luigiBack.src = 'images/luigi7.png'
+        luigiRight.src = 'images/luigi1.png';
+        luigiLeft.src = 'images/luigi2.png';
+        luigiBack.src = 'images/luigi7.png';
 
-        let turtle = new Image()
-        turtle.src = 'images/turtle.png'
+        let turtle = new Image();
+        let rastro=new Image();
+        turtle.src = 'images/turtle.png';
+        rastro.src='images/trail1.png';
+
+      
 
         //declaração das variáveis
         let x = W - 450, y = H - 160;
@@ -65,7 +71,6 @@
             }
 
             update() { //função do movimento da moeda
-
                 this.ballX += this.dX;
                 this.ballY += this.dY;
 
@@ -107,20 +112,23 @@
 
         b.push(new Coin(xInit, yInit, 100, 100))
 
-
         function render() { //renderização do jogo
             ctx.clearRect(0, 0, W, H);
+            
             //fundo preto
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, W, H);
+            
             //desenho do fundo e dos restantes elementos(imagens e texto)
             ctx.drawImage(bgImage, 0, 0, 750, 555, 0, 0, W + 50, H - 50);
-            ctx.drawImage(heartImage, W - 50, H - 45, 50, 50);
-            ctx.drawImage(heartImage, W - 100, H - 45, 50, 50);
-            ctx.drawImage(heartImage, W - 150, H - 45, 50, 50);
-            ctx.fillStyle = "white";
-            ctx.font = "30px Courier New ";
-            ctx.fillText("Lives:", W - 255, H - 11);
+            
+
+            if(upKey && turtleY > -1){ //caso a tecla para cima seja pressionada - mandar o arpão
+                
+                ctx.drawImage(turtle, 0, 0, 29, 30, turtleX, turtleY - 38, 60, 70);
+                ctx.drawImage(rastro,0, 0, 16, 100, turtleX , turtleY , 40, 400);
+                
+                turtleY = turtleY - 10;
+                console.log(turtleY);
+            }
 
             //conjunto de funções respetivo ao movimento da personagem
             if (!rightKey && !leftKey) { //caso nenhuma tecla de movimento seja pressionada
@@ -211,7 +219,11 @@
 
         window.addEventListener('keydown', ArrowPressed)
         window.addEventListener('keyup', ArrowReleased)
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 1b273799925987212394209247e1ad1f0a3f67f7
     </script>
 </body>
 
