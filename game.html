@@ -66,9 +66,9 @@
                 this.dX = 5 * Math.cos(d);
                 this.dY = 5 * Math.sin(d);
                 this.v = v;
-
+                
             }
-
+            
             update() { //função do movimento da moeda
                 this.ballX += this.dX;
                 this.ballY += this.dY;
@@ -89,7 +89,8 @@
 
                  if (this.dY < 0 && this.dY > -2.1) {
                     this.dY = 0;   
-                }   
+                } 
+                
             }
 
             draw() { //desenho da moeda
@@ -109,8 +110,10 @@
         let yInit = H / 4;
         let velocity = 5;
         let direction = Math.random() * 2 * Math.PI
+        
 
         b.push(new Coin(xInit, yInit, 50, 50, velocity, direction))
+           
 
 
         function render() { //renderização do jogo
