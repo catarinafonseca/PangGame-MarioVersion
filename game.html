@@ -51,8 +51,8 @@
         let frameIndex = 0;
         let rightIndex = 0;
         let leftIndex = 0;
-        let turtleX = x;
-        let turtleY = y;
+        let turtleX = x
+        let turtleY = y
         let gravity = 0.5
         let bounce = 0.7
 
@@ -174,8 +174,18 @@
                     leftIndex = 0;
             }
             
+            if(upKey && turtleY > 30){ //caso a tecla para cima seja pressionada - mandar o arpão
+    
+                ctx.drawImage(turtle, 0, 0, 29, 30, turtleX, turtleY - 38, 60, 70);
+                turtleY = turtleY - 10
+                console.log(turtleY);
+                
+            }
+            if(turtleY == 30){
+                upKey = false
+            }
+                
             
-         
             b.forEach(function (coin) {
                 coin.draw();
                 coin.update();
