@@ -47,8 +47,8 @@
         let frameIndex = 0;
         let rightIndex = 0;
         let leftIndex = 0;
-        let turtleX = x;
-        let turtleY = y;
+        let turtleX = x
+        let turtleY = y
         let gravity = 0.5
         let bounce = 0.7
 
@@ -162,20 +162,18 @@
                     leftIndex = 0;
             }
             
-            if(upKey && turtleY > -1){ //caso a tecla para cima seja pressionada - mandar o arpão
-                
+            if(upKey && turtleY > 30){ //caso a tecla para cima seja pressionada - mandar o arpão
+    
                 ctx.drawImage(turtle, 0, 0, 29, 30, turtleX, turtleY - 38, 60, 70);
                 turtleY = turtleY - 10
                 console.log(turtleY);
+                
             }
-
-            if(turtleY == 0){ //retorna o arpão à personagem
-
+            if(turtleY == 30){
                 upKey = false
-                turtleY = y
-                turtleX = x               
             }
-         
+                
+            
             b.forEach(function (coin) {
                 coin.draw();
                 coin.update();
@@ -196,10 +194,13 @@
                 rightKey = false
             }
 
-            if (e.key == 'ArrowUp') {
+            if (e.key == 'ArrowUp' && upKey == false) {
                 upKey = true
                 leftKey = false 
                 rightKey = false
+                turtleX = x
+                turtleY = y
+                
             }
         }
 
