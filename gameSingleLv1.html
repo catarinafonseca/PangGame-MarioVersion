@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Mario PANG</title>
     <style>
-    html{
-        height: 100%;
-        background: linear-gradient(rgba(94,145, 254,1)40%, rgba(200,80, 19,1) )
-    }
-    canvas {
-                border: 3px solid black;
-            }
+        html {
+            height: 100%;
+            background: linear-gradient(rgba(94, 145, 254, 1)40%, rgba(200, 80, 19, 1))
+        }
+
+        canvas {
+            border: 3px solid black;
+        }
     </style>
 </head>
 <!-- style="background-color: black;" -->
@@ -20,7 +21,7 @@
 <body>
     <div style="text-align:center">
 
-        <canvas id="myCanvas" width="750" height="500" >
+        <canvas id="myCanvas" width="750" height="500">
             Your browser does not support HTML5 Canvas.
 
         </canvas>
@@ -33,8 +34,7 @@
         const W = canvas.width, H = canvas.height;
 
         let images = {};
-        let totalResources = 7;
-        let numResourcesLoaded = 0;
+     
 
 
         loadImage("luigiBack");
@@ -51,19 +51,11 @@
             images[name] = new Image();
             images[name].src = "images/" + name + ".png";
             images[name].onload = function () {
-                resourceLoaded();	//only starts the animation after loading all images			
+                //only starts the animation after loading all images			
             };
         }
 
-        function resourceLoaded() {
-            numResourcesLoaded++;
-            if (numResourcesLoaded == totalResources) {
 
-                coin1 = new Coin(xInit, yInit, 100, 100, dX, dY, 0)
-                cArray.push(coin1)
-
-            }
-        }
 
 
 
@@ -95,7 +87,7 @@
    */
 
         //declaração das variáveis
-        let x = W - 450, y = H - 160;
+        let x = 0, y = H - 160;
         let rightKey = leftKey = upKey = enterKey = false;
         let frameIndex = 0;
         let rightIndex = 0;
@@ -209,20 +201,28 @@
         let xInit = W / 2;
         let yInit = 100;
         let lifes = 3
-        let win = false
         let dX = 9 * Math.cos(Math.PI / 3)
         let dY = 9 * Math.sin(Math.PI / 3);
         let t1 = new Turtle(images["turtle"], -1000, -1000, 30, 30);
         let colideCount = 0;
         let colidePlayer = false
         let colide = false
-        /*  let coin1 = new Coin(xInit, yInit, 100, 100, dX, dY, 0) */
+        let coin1 = new Coin(xInit, yInit, 100, 100, dX, dY, 0)
         let coin2
         let coin3
         let cArray = new Array();
-        /* cArray.push(coin1) */
+        cArray.push(coin1)
 
-
+        function showLevel() {
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = 'white'
+            ctx.font = 'bold 50px Arial';
+            let text = "LEVEL 1";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+        }
+        setTimeout(showLevel(),1000)
 
 
         function render() { //renderização do jogo
@@ -230,7 +230,7 @@
             ctx.clearRect(0, 0, W, H);
 
 
-            if (win == false && lifes > 0) {
+            if (lifes > 0) {
 
                 //desenho do fundo e dos restantes elementos(imagens e texto)
                 ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
@@ -262,7 +262,7 @@
                     luigi.draw(images["luigiBack"], 0, 0, 15, 30, 33, 70);
                 }
 
-                if (rightKey && x < W - 50) { //caso a tecla da direita seja pressionada
+                if (rightKey && x < W - 60) { //caso a tecla da direita seja pressionada
                     luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, 60, 70);
 
 
@@ -272,7 +272,7 @@
                         rightIndex = 0;
                 }
 
-                if (rightKey && x == W - 50) { //evita que a personagem saia da tela do lado direito
+                if (rightKey && x >= W - 60) { //evita que a personagem saia da tela do lado direito
 
                     luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, 60, 70);
 
@@ -291,7 +291,7 @@
                         leftIndex = 0;
                 }
 
-                if (leftKey && x == 4) { //evita que a personagem saia da tela do lado esquerdo
+                if (leftKey && x == 0) { //evita que a personagem saia da tela do lado esquerdo
 
                     luigi.draw(images["luigiLeft"], leftIndex * 29, 0, 29, 30, 60, 70);
 
@@ -302,20 +302,20 @@
 
                 for (let i = cArray.length - 1; i >= 0; i--) {
                     const coin = cArray[i];
-                    if (coin.ballX + coin.ballW -20< luigi.x
+                    if (coin.ballX + coin.ballW - 20 < luigi.x
                         //totally to the left: no collision
-                        || coin.ballX +20 > luigi.x + luigi.w
+                        || coin.ballX + 20 > luigi.x + luigi.w
                         //totally to the right: no collision
                         || coin.ballY + coin.ballH < luigi.y
                         //totally above: no collision
                         || coin.ballY > luigi.y + luigi.h) {
 
-              
+
 
                     } else {
-                         colidePlayer = true
-                        
-                        lifes-- 
+                        colidePlayer = true
+
+                        lifes--
 
 
                     }
@@ -358,22 +358,21 @@
                     }
 
 
-                     if(colidePlayer)
-                    {
-                        
-                        y+=50;
-                        upKey=false
-                        
+                    if (colidePlayer) {
+
+                        y += 50;
+                        upKey = false
+
                     }
-                   
-                    if(y>700){
-                        x= W - 450
-                        y= H - 160
-                        
-                        colidePlayer=false
+
+                    if (y > 700) {
+                        x = 0
+                        y = H - 160
+
+                        colidePlayer = false
                         luigi.draw(images["luigiBack"], 0, 0, 15, 30, 33, 70);
                     }
-                    
+
                     coin.draw();
                     coin.update();
 
@@ -385,16 +384,17 @@
                 ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
                 ctx.fillStyle = "black";
                 ctx.fillRect(0, H - 50, W, H - 450);
-                ctx.fillStyle = 'white'
+                ctx.fillStyle = 'red'
                 ctx.font = 'bold 70px Arial';
                 let text = "GAME OVER";
-                ctx.fillText(text, canvas.width / 2, canvas.height / 2 - 100);
+                ctx.fillText(text, W / 2, H / 2);
+                ctx.fillStyle = 'black'
                 let info = "Press Enter to Menu"
                 ctx.font = "bold 20px Arial"
                 ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
 
-                ctx.fillText(info, canvas.width / 2, canvas.height / 2);
+
+                ctx.fillText(info, W / 2, H / 2 + 50);
 
                 setTimeout(function (e) {
                     if (enterKey)
@@ -404,27 +404,18 @@
 
 
             if (cArray.length == 4) {
-        if (cArray.every(coin => coin.collisions == 3)) {
-            win = true
+                if (cArray.every(coin => coin.collisions == 3)) {
 
-            ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
-                ctx.fillStyle = "black";
 
-            ctx.fillStyle = 'white'
-            ctx.font = 'bold 50px Arial';
-            let text = "YOU WIN";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(text, W / 2, H/ 2);
 
-            setTimeout(function () { window.location.href = '../j1-n2.html'; }, 4000);
 
-        }}
+                    setTimeout(function () { window.location.href = '../gameSingleLv2.html'; }, 1000);
+
+                }
+            }
             ctx.fillStyle = "black";
             ctx.fillRect(0, H - 50, W, H - 450);
-            /* ctx.drawImage(heartImage, W - 50, H - 45, 50, 50);
-            ctx.drawImage(heartImage, W - 100, H - 45, 50, 50);
-            ctx.drawImage(heartImage, W - 150, H - 45, 50, 50); */
+
             ctx.fillStyle = "white";
             ctx.font = "30px Courier New ";
             ctx.fillText("Lives:", W - 255, H - 15);
@@ -436,11 +427,20 @@
                 contador += 50;
             }
             ctx.drawImage(images["floor"], 0, -455, 750, 555, 0, 0, W, H);
+
+            
+        }
+       
+        setTimeout(function () { setInterval(render, 1000 / 20); }, 4000);
+        
         
 
-        }
+       
 
-        setInterval(render, 1000 / 20)
+
+
+
+
 
         //conjunto de funções que controlam as teclas quando pressionadas e deixadas de estar pressionadas
         function ArrowPressed(e) {
@@ -474,6 +474,8 @@
                 leftKey = false
 
         }
+
+
 
         window.addEventListener('keydown', ArrowPressed)
         window.addEventListener('keyup', ArrowReleased)
