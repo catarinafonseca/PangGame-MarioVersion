@@ -89,23 +89,11 @@
 </head>
 
 <body>
-    <script>
-        /* const audioBackGround = new Audio('images/sound.mp3');
-        audioBackGround.volume = 0.1;
-        function playSoundBackground(sound) {
-        const audio = new Audio('images/' + sound);
-        audio.volume = 0.3;
-        audio.play();
-        } */
-        <audio src="https://www.youtube.com/watch?v=_9bB7r0M9kg"></audio>
-        window.addEventListener("DOMContentLoaded", event => {
-        const audio = document.querySelector("audio");
-        audio.volume = 0.5;
-        audio.play();
-});
-    </script> 
-    
-    
+    <audio src="images/sound.mp3" autoplay>
+        <p>If you are reading this, it is because your browser does not support the audio element.</p>
+        <embed src="images/sound.mp3" width="180" height="90" hidden="true" />
+    </audio>
+
     <svg xmlns="http://www.w3.org/2000/svg"
         style="margin: auto; text-align:center ; display: block; shape-rendering: auto;" width="750" height="500"
         preserveAspectRatio="xMidYMid">
@@ -255,6 +243,8 @@
         </g>
 
     </svg>
+
+    
 </body>
 
 </html>
