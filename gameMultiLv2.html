@@ -197,7 +197,16 @@
         cArray.push(coin1)
         cArray.push(coin2)
 
-
+        function showLevel() {
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = 'white'
+            ctx.font = 'bold 50px Arial';
+            let text = "LEVEL 2";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, W / 2, H / 2);
+        }
+        setTimeout(showLevel(), 1000)
 
 
         function render() { //renderização do jogo
@@ -556,21 +565,11 @@
 
 
         }
+        setTimeout(function () { setInterval(render, 1000 / 20); }, 4000);
+       
 
-        setInterval(render, 1000 / 20)
 
-
-
-        function showLevel() {
-            ctx.clearRect(0, 0, W, H);
-            ctx.fillStyle = 'white'
-            ctx.font = 'bold 50px Arial';
-            let text = "LEVEL 2";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(text, W / 2, H / 2);
-        }
-        setTimeout(showLevel(), 1000)
+       
 
 
 
