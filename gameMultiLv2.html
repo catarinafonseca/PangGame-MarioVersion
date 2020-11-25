@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Mario PANG</title>
     <style>
-    html{
-        height: 100%;
-        background: linear-gradient(rgba(94,145, 254,1)40%, rgba(200,80, 19,1) )
-    }
-    canvas {
-                border: 3px solid black;
-            }
+        html {
+            height: 100%;
+            background: linear-gradient(rgba(94, 145, 254, 1)40%, rgba(200, 80, 19, 1))
+        }
+
+        canvas {
+            border: 3px solid black;
+        }
     </style>
 </head>
 <!-- style="background-color: black;" -->
@@ -20,7 +21,7 @@
 <body>
     <div style="text-align:center">
 
-        <canvas id="myCanvas" width="750" height="500" >
+        <canvas id="myCanvas" width="750" height="500">
             Your browser does not support HTML5 Canvas.
 
         </canvas>
@@ -39,6 +40,9 @@
         loadImage("luigiBack");
         loadImage("luigiRight");
         loadImage("luigiLeft");
+        loadImage("marioBack");
+        loadImage("marioRight");
+        loadImage("marioLeft");
         loadImage("bg4");
         loadImage("coin");
         loadImage("heart");
@@ -50,55 +54,20 @@
             images[name] = new Image();
             images[name].src = "images/" + name + ".png";
             images[name].onload = function () {
-               	//only starts the animation after loading all images			
+                //only starts the animation after loading all images			
             };
         }
 
-     /*    function resourceLoaded() {
-            numResourcesLoaded++;
-            if (numResourcesLoaded == totalResources) {
-
-                coin1 = new Coin(xInit, yInit, 100, 100, dX, dY, 0)
-                cArray.push(coin1)
-
-            }
-        } */
-
-
-
-        //declaração das imagens
-        /*   let bgImage = new Image();
-          let heartImage = new Image();
-  
-          let coinImage = new Image();
-          let floor = new Image();
-  
-          floor.src = 'images/floor.png'
-          bgImage.src = 'images/bg4.png';
-          heartImage.src = 'images/heart.png';
-  
-          coinImage.src = 'images/coin.png';
-  
-          let luigiLeft = new Image();
-          let luigiRight = new Image();
-          let luigiBack = new Image();
-          luigiRight.src = 'images/luigiRight.png';
-          luigiLeft.src = 'images/luigiLeft.png';
-          luigiBack.src = 'images/luigiBack.png';
-  
-          let turtle = new Image();
-          let rastro = new Image();
-          turtle.src = 'images/turtle.png';
-          rastro.src = 'images/trail1.png';
-  
-   */
 
         //declaração das variáveis
         let x = 0, y = H - 160;
-        let rightKey = leftKey = upKey = enterKey = false;
+        let x1 = W - 40, y1 = H - 160;
+        let rightKey = leftKey = upKey = enterKey = aKey = dKey = wKey = false;
         let frameIndex = 0;
         let rightIndex = 0;
         let leftIndex = 0;
+        let MrightIndex = 0;
+        let MleftIndex = 0;
         let a = 0.5;
 
         class Turtle {
@@ -130,12 +99,14 @@
 
             }
 
-            draw(img, sx, sy, cx, cy, w, h) {
+            draw(img, sx, sy, cx, cy, x, y, w, h) {
                 this.img = img
                 this.cx = cx
                 this.cy = cy
                 this.w = w
                 this.h = h
+                this.x = x
+                this.y = y;
                 ctx.drawImage(this.img, sx, sy, cx, cy, x, y, w, h);
             }
 
@@ -207,32 +178,26 @@
 
         let xInit = W / 2;
         let yInit = 100;
-        let lifes = 3
+        let lifesL = 3
+        let lifesM = 3
         let dX = 9 * Math.cos(Math.PI / 3)
         let dY = 9 * Math.sin(Math.PI / 3);
         let t1 = new Turtle(images["turtle"], -1000, -1000, 30, 30);
+        let t2 = new Turtle(images["turtle"], -1000, -1000, 30, 30);
         let colideCount = 0;
-        let colidePlayer = false
+        let colideLuigi = false
+        let colideMario = false
         let colide = false
-        let coin1 = new Coin(xInit, yInit, 100, 100, dX, dY, 0) 
-        let coin2 = new Coin(xInit - 70 , yInit , 100, 100, -dX, dY, 0) 
+
+        let coin1 = new Coin(xInit, yInit, 100, 100, dX, dY, 0)
+        let coin2 = new Coin(xInit - 70, yInit, 100, 100, -dX, dY, 0)
         let coin3
         let coin4
         let cArray = new Array();
-         cArray.push(coin1) 
-         cArray.push(coin2) 
+        cArray.push(coin1)
+        cArray.push(coin2)
 
 
-         function showLevel() {
-            ctx.clearRect(0, 0, W, H);
-            ctx.fillStyle = 'white'
-            ctx.font = 'bold 50px Arial';
-            let text = "LEVEL 2";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(text, W / 2, H / 2);
-        }
-        setTimeout(showLevel(),1000)
 
 
         function render() { //renderização do jogo
@@ -240,7 +205,7 @@
             ctx.clearRect(0, 0, W, H);
 
 
-            if ( lifes > 0) {
+            if (lifesM > 0 || lifesL > 0) {
 
                 //desenho do fundo e dos restantes elementos(imagens e texto)
                 ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
@@ -263,17 +228,42 @@
                     t1.turtleX = -1000
                 }
 
+
+                if (wKey && t2.turtleY > -1) { //caso a tecla para cima seja pressionada - mandar o arpão
+
+                    ctx.drawImage(images["turtle"], 0, 0, 29, 30, t2.turtleX, t2.turtleY - 38, 60, 70);
+                    ctx.drawImage(images["trail1"], 2, 0, 16, 100, t2.turtleX, t2.turtleY, 50, 400);
+
+                    t2.turtleY -= 20;
+                }
+
+                if (t2.turtleY == 0) { //retorna o arpão à personagem
+
+                    wKey = false
+                    t2.turtleY = -1000
+                    t2.turtleX = -1000
+                }
+
                 let luigi = new Player(x, y)
+                let mario = new Player(x1, y1)
+
+
 
                 /*  luigi.draw(images["luigiRight"],29,30,60,70); */
                 //conjunto de funções respetivo ao movimento da personagem
                 if (!rightKey && !leftKey) { //caso nenhuma tecla de movimento seja pressionada
 
-                    luigi.draw(images["luigiBack"], 0, 0, 15, 30, 33, 70);
+                    luigi.draw(images["luigiBack"], 0, 0, 15, 30, x, y, 33, 70);
+
+                }
+                if (!aKey && !dKey) { //caso nenhuma tecla de movimento seja pressionada
+
+                    mario.draw(images["marioBack"], 0, 0, 15, 30, x1, y1, 33, 70);
+
                 }
 
                 if (rightKey && x < W - 60) { //caso a tecla da direita seja pressionada
-                    luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, 60, 70);
+                    luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, x, y, 60, 70);
 
 
                     x = x + 8;
@@ -284,7 +274,7 @@
 
                 if (rightKey && x >= W - 60) { //evita que a personagem saia da tela do lado direito
 
-                    luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, 60, 70);
+                    luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, x, y, 60, 70);
 
                     rightIndex++;
                     if (rightIndex == 3)
@@ -293,7 +283,7 @@
 
                 if (leftKey && x > 4) { //caso a tecla da esquerda seja pressionada
 
-                    luigi.draw(images["luigiLeft"], leftIndex * 29, 0, 29, 30, 60, 70);
+                    luigi.draw(images["luigiLeft"], leftIndex * 29, 0, 29, 30, x, y, 60, 70);
 
                     x = x - 8;
                     leftIndex++;
@@ -303,7 +293,7 @@
 
                 if (leftKey && x == 0) { //evita que a personagem saia da tela do lado esquerdo
 
-                    luigi.draw(images["luigiLeft"], leftIndex * 29, 0, 29, 30, 60, 70);
+                    luigi.draw(images["luigiLeft"], leftIndex * 29, 0, 29, 30, x, y, 60, 70);
 
                     leftIndex++;
                     if (leftIndex == 3)
@@ -311,25 +301,90 @@
                 }
 
 
+
+
+
+                if (dKey && x1 < W - 60) { //caso a tecla da direita seja pressionada
+                    mario.draw(images["marioRight"], MrightIndex * 29, 0, 29, 30, x1, y1, 60, 70);
+
+
+                    x1 = x1 + 8;
+                    MrightIndex++;
+                    if (MrightIndex == 3)
+                        MrightIndex = 0;
+                }
+
+                if (dKey && x1 >= W - 60) { //evita que a personagem saia da tela do lado direito
+
+                    mario.draw(images["marioRight"], MrightIndex * 29, 0, 29, 30, x1, y1, 60, 70);
+
+                    MrightIndex++;
+                    if (MrightIndex == 3)
+                        MrightIndex = 0;
+                }
+
+                if (aKey && x1 > 4) { //caso a tecla da esquerda seja pressionada
+
+                    mario.draw(images["marioLeft"], MleftIndex * 29, 0, 29, 30, x1, y1, 60, 70);
+
+                    x1 = x1 - 8;
+                    MleftIndex++;
+                    if (MleftIndex == 3)
+                        MleftIndex = 0;
+                }
+
+                if (aKey && x1 <= 0) { //evita que a personagem saia da tela do lado esquerdo
+
+                    mario.draw(images["marioLeft"], MleftIndex * 29, 0, 29, 30, x1, y1, 60, 70);
+
+                    MleftIndex++;
+                    if (MleftIndex == 3)
+                        MleftIndex = 0;
+                }
+
+
                 for (let i = cArray.length - 1; i >= 0; i--) {
                     const coin = cArray[i];
-                    if (coin.ballX + coin.ballW -20< luigi.x
+
+                    if (coin.ballX + coin.ballW - 20 < luigi.x
                         //totally to the left: no collision
-                        || coin.ballX +20 > luigi.x + luigi.w
+                        || coin.ballX + 20 > luigi.x + luigi.w
                         //totally to the right: no collision
                         || coin.ballY + coin.ballH < luigi.y
                         //totally above: no collision
                         || coin.ballY > luigi.y + luigi.h) {
 
-              
+
 
                     } else {
-                         colidePlayer = true
-                        
-                        lifes-- 
+                        colideLuigi = true
+
+                        lifesL--
 
 
                     }
+
+
+                    if (coin.ballX + coin.ballW - 20 < mario.x
+                        //totally to the left: no collision
+                        || coin.ballX + 20 > mario.x + mario.w
+                        //totally to the right: no collision
+                        || coin.ballY + coin.ballH < mario.y
+                        //totally above: no collision
+                        || coin.ballY > mario.y + mario.h) {
+
+
+
+                    } else {
+                        colideMario = true
+
+                        lifesM--
+
+
+                    }
+
+
+
 
                     if (t1.turtleX + 30 >= coin.ballX && t1.turtleX <= coin.ballX + coin.ballW && t1.turtleY + 30 >= coin.ballY && t1.turtleY <= coin.ballY + coin.ballH) {
                         upKey = false
@@ -342,6 +397,20 @@
 
                     }
 
+
+                    if (t2.turtleX + 30 >= coin.ballX && t2.turtleX <= coin.ballX + coin.ballW && t2.turtleY + 30 >= coin.ballY && t2.turtleY <= coin.ballY + coin.ballH) {
+                        wKey = false
+                        t2.turtleY = -1000
+                        t2.turtleX = -1000
+
+                        colide = true
+                        coin.collisions++
+                        console.log(coin.collisions);
+
+                    }
+
+
+
                     if (colide == true && coin.collisions == 1) {
                         coin.ballW = 50
                         coin.ballH = 50
@@ -350,6 +419,7 @@
                         coin3 = new Coin(coin.ballX, coin.ballY, 50, 50, -coin.dX, -coin.dY, 1)
                         cArray.push(coin3)
                         colide = false
+
                     }
                     if (colide == true && coin.collisions == 2) {
                         coin.ballW = 25
@@ -359,6 +429,7 @@
                         coin4 = new Coin(coin.ballX, coin.ballY, 25, 25, -coin.dX, -coin.dY, 2)
                         cArray.push(coin4)
                         colide = false
+
                     }
                     if (colide == true && coin.collisions >= 3) {
                         coin.ballX = 0
@@ -366,31 +437,51 @@
                         coin.ballW = 0
                         coin.ballH = 0
                         colide = false
+
                     }
 
 
-                     if(colidePlayer)
-                    {
-                        
-                        y+=100;
-                        upKey=false
-                        
+                    if (colideLuigi) {
+
+                        y += 100;
+                        upKey = false
+                        rightKey = false
+                        leftKey = false
+
                     }
-                   
-                    if(y>2000){
-                        x= 0
-                        y= H - 160
-                        
-                        colidePlayer=false
+
+                    if (y > 2000) {
+                        x = 0
+                        y = H - 160
+
+                        colideLuigi = false
                         luigi.draw(images["luigiBack"], 0, 0, 15, 30, 33, 70);
                     }
-                    
+
+                    if (colideMario) {
+
+                        y1 += 100;
+                        wKey = false
+                        aKey = false
+                        dKey = false
+
+                    }
+
+                    if (y1 > 2000) {
+                        x1 = W - 40
+                        y1 = H - 160
+
+                        colideMario = false
+                        mario.draw(images["marioBack"], 0, 0, 15, 30, 33, 70);
+                    }
+
+
                     coin.draw();
                     coin.update();
 
                 }
             }
-            if (lifes < 1) {
+            if (lifesL < 1 || lifesM < 1) {
 
 
                 ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
@@ -399,14 +490,14 @@
                 ctx.fillStyle = 'red'
                 ctx.font = 'bold 70px Arial';
                 let text = "GAME OVER";
-                ctx.fillText(text, W / 2, H / 2 );
+                ctx.fillText(text, W / 2, H / 2);
                 ctx.fillStyle = 'black'
                 let info = "Press Enter to Menu"
                 ctx.font = "bold 20px Arial"
                 ctx.textAlign = "center";
-                
 
-                ctx.fillText(info, W / 2, H/ 2 + 50);
+
+                ctx.fillText(info, W / 2, H / 2 + 50);
 
                 setTimeout(function (e) {
                     if (enterKey)
@@ -416,45 +507,72 @@
 
 
             if (cArray.length == 8) {
-        if (cArray.every(coin => coin.collisions >= 3)) {
-           
-            ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
-                ctx.fillStyle = "black";
+                if (cArray.every(coin => coin.collisions >= 3)) {
 
-            ctx.fillStyle = 'red'
-            ctx.font = 'bold 70px Arial';
-            let text = "YOU WIN";
-            ctx.fillText(text, W / 2, H / 2 );
-            ctx.fillStyle = 'black'
-            let info = "Press Enter to Menu"
-            ctx.textAlign = "center";
-            ctx.font = "bold 20px Arial"
-            ctx.fillText(info, W / 2, H/ 2 + 50);
 
-            setTimeout(function (e) {
-                    if (enterKey)
-                        window.location.href = '../intro.html';
-                }, 3000);
+                    ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
+                    ctx.fillStyle = "black";
 
-        }}
+                    ctx.fillStyle = 'red'
+                    ctx.font = 'bold 70px Arial';
+                    let text = "YOU WIN";
+                    ctx.fillText(text, W / 2, H / 2);
+                    ctx.fillStyle = 'black'
+                    let info = "Press Enter to Menu"
+                    ctx.textAlign = "center";
+                    ctx.font = "bold 20px Arial"
+                    ctx.fillText(info, W / 2, H / 2 + 50);
+
+                    setTimeout(function (e) {
+                        if (enterKey)
+                            window.location.href = '../intro.html';
+                    }, 3000);
+
+                }
+            }
             ctx.fillStyle = "black";
             ctx.fillRect(0, H - 50, W, H - 450);
+
             ctx.fillStyle = "white";
             ctx.font = "30px Courier New ";
-            
-            let contador = 0;
 
-            for (let i = 0; i < lifes; i++) {
+            let contador = 0;
+            let contador1 = 50;
+
+            for (let i = 0; i < lifesL; i++) {
 
                 ctx.drawImage(images["heart"], 0 + contador, H - 45, 50, 50);
                 contador += 50;
             }
+
+            for (let i = 0; i < lifesM; i++) {
+
+                ctx.drawImage(images["heart"], W - contador1, H - 45, 50, 50);
+                contador1 += 50;
+            }
+
+
             ctx.drawImage(images["floor"], 0, -455, 750, 555, 0, 0, W, H);
-        
+
 
         }
 
-        setTimeout(function () { setInterval(render, 1000 / 20); }, 4000);
+        setInterval(render, 1000 / 20)
+
+
+
+        function showLevel() {
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = 'white'
+            ctx.font = 'bold 50px Arial';
+            let text = "LEVEL 2";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, W / 2, H / 2);
+        }
+        setTimeout(showLevel(), 1000)
+
+
 
         //conjunto de funções que controlam as teclas quando pressionadas e deixadas de estar pressionadas
         function ArrowPressed(e) {
@@ -479,6 +597,30 @@
             if (e.key == 'Enter') {
                 enterKey = true
             }
+
+
+            if (e.keyCode == 68) {
+                dKey = true
+                aKey = false
+                console.log("clicou");
+            }
+
+            if (e.keyCode == "65") {
+                aKey = true
+                dKey = false
+            }
+
+
+            if (e.keyCode == 87 && wKey == false) {
+                wKey = true
+                aKey = false
+                dKey = false
+                t2.turtleX = x1
+                t2.turtleY = y1
+            }
+            if (e.key == 'Enter') {
+                enterKey = true
+            }
         }
 
         function ArrowReleased(e) {
@@ -486,8 +628,13 @@
                 rightKey = false
             if (e.key == 'ArrowLeft')
                 leftKey = false
-
+            if (e.keyCode == 68)
+                dKey = false
+            if (e.keyCode == 65)
+                aKey = false
         }
+
+
 
         window.addEventListener('keydown', ArrowPressed)
         window.addEventListener('keyup', ArrowReleased)

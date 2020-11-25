@@ -57,35 +57,6 @@
 
 
 
-
-
-        //declaração das imagens
-        /*   let bgImage = new Image();
-          let heartImage = new Image();
-  
-          let coinImage = new Image();
-          let floor = new Image();
-  
-          floor.src = 'images/floor.png'
-          bgImage.src = 'images/bg4.png';
-          heartImage.src = 'images/heart.png';
-  
-          coinImage.src = 'images/coin.png';
-  
-          let luigiLeft = new Image();
-          let luigiRight = new Image();
-          let luigiBack = new Image();
-          luigiRight.src = 'images/luigiRight.png';
-          luigiLeft.src = 'images/luigiLeft.png';
-          luigiBack.src = 'images/luigiBack.png';
-  
-          let turtle = new Image();
-          let rastro = new Image();
-          turtle.src = 'images/turtle.png';
-          rastro.src = 'images/trail1.png';
-  
-   */
-
         //declaração das variáveis
         let x = 0, y = H - 160;
         let rightKey = leftKey = upKey = enterKey = false;
@@ -220,7 +191,7 @@
             let text = "LEVEL 1";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+            ctx.fillText(text, W / 2, H / 2);
         }
         setTimeout(showLevel(),1000)
 
@@ -360,12 +331,12 @@
 
                     if (colidePlayer) {
 
-                        y += 50;
+                        y += 100;
                         upKey = false
 
                     }
 
-                    if (y > 700) {
+                    if (y > 2000) {
                         x = 0
                         y = H - 160
 
@@ -404,12 +375,12 @@
 
 
             if (cArray.length == 4) {
-                if (cArray.every(coin => coin.collisions == 3)) {
+                if (cArray.every(coin => coin.collisions >= 3)) {
 
 
 
 
-                    setTimeout(function () { window.location.href = '../gameSingleLv2.html'; }, 1000);
+                    setTimeout(function () { window.location.href = './gameSingleLv2.html'; }, 1000);
 
                 }
             }
@@ -418,12 +389,12 @@
 
             ctx.fillStyle = "white";
             ctx.font = "30px Courier New ";
-            ctx.fillText("Lives:", W - 255, H - 15);
-            let contador = 50;
+            
+            let contador = 0;
 
             for (let i = 0; i < lifes; i++) {
 
-                ctx.drawImage(images["heart"], W - contador, H - 45, 50, 50);
+                ctx.drawImage(images["heart"], 0 + contador, H - 45, 50, 50);
                 contador += 50;
             }
             ctx.drawImage(images["floor"], 0, -455, 750, 555, 0, 0, W, H);
