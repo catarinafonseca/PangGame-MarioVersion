@@ -6,17 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Mario Pang</title>
     <style>
-        text { 
-            text-anchor: middle;
-            font-size: 80px;
-            opacity: 0;
-        }
         /* Gradiente do background */
         html{ 
             height: 100%;
             background: linear-gradient(rgba(94,145, 254,1)40%, rgba(200,80, 19,1) )
         }
         /* Animação do título para "piscar" as letras */
+       /*  Retirado do seguinte link:https://loading.io/animation/text/ */
         @keyframes blink {
                 0% {
                     opacity: 1;
@@ -41,13 +37,11 @@
         /* Animação para deslizar da esquerda para a direita */
         @keyframes slide {
             0% {
-                animation-timing-function: cubic-bezier(0.1006, 0.3357, -0.2396, 0.6703);
                 transform: translate(-800199px, 0px);
                 opacity: 0.05;
             }
 
             2% {
-                animation-timing-function: cubic-bezier(0.2668, 0.6542, 0.5372, 0.8035);
                 transform: translate(-725.8px, 0px) ;
                 opacity: 1;
             }
@@ -60,12 +54,10 @@
         /* Animação para deslizar da direita para a esquerda */
         @keyframes slide-left{
             0% {
-                animation-timing-function: cubic-bezier(0.1006,0.3357,-0.2396,0.6703);
                 transform: translate(1999px,0px);
                 opacity: 0.05;
             }
             2% {
-                animation-timing-function: cubic-bezier(0.2668,0.6542,0.5372,0.8035);
                 transform: translate(725.8px,0px);
                 opacity: 1;
             }
