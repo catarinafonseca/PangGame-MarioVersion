@@ -191,14 +191,14 @@
                 //desenho do fundo 
                 ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
                 
-                /* caso a tecla para cima seja pressionada - lançar o arpão */
-                if (upKey && t1.turtleY > -1) { 
+                /* caso a tecla para cima ou w seja pressionada - lançar o arpão */
+                if (upKey && t1.turtleY > -1 && lifesL>0) { 
                     ctx.drawImage(images["turtle"], 0, 0, 29, 30, t1.turtleX, t1.turtleY - 38, 60, 70);
                     ctx.drawImage(images["trail1"], 2, 0, 16, 100, t1.turtleX, t1.turtleY, 50, 400);
 
                     t1.turtleY -= 20;
                 }
-                if (wKey && t2.turtleY > -1) { 
+                if (wKey && t2.turtleY > -1 && lifesM>0) { 
                     ctx.drawImage(images["turtle"], 0, 0, 29, 30, t2.turtleX, t2.turtleY - 38, 60, 70);
                     ctx.drawImage(images["trail1"], 2, 0, 16, 100, t2.turtleX, t2.turtleY, 50, 400);
 
@@ -224,15 +224,15 @@
                 /* -----------------------Movimento das personagens-----------------------*/
 
                 /* caso nenhuma tecla de movimento seja pressionada */
-                if (!rightKey && !leftKey) {
+                if (!rightKey && !leftKey && lifesL>0) {
                     luigi.draw(images["luigiBack"], 0, 0, 15, 30, x, y, 33, 70);
                 }
-                if (!aKey && !dKey) {
+                if (!aKey && !dKey && lifesM>0) {
                     mario.draw(images["marioBack"], 0, 0, 15, 30, x1, y1, 33, 70);
                 }
 
                 /* caso a tecla da direita ou d seja pressionada, respetivamente*/
-                if (rightKey && x < W - 60) { 
+                if (rightKey && x < W - 60 && lifesL>0) { 
                     luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, x, y, 60, 70);
 
                     x = x + 8;
@@ -240,7 +240,7 @@
                     if (rightIndex == 3)
                         rightIndex = 0;
                 }
-                if (dKey && x1 < W - 60) {
+                if (dKey && x1 < W - 60 && lifesM>0) {
                     mario.draw(images["marioRight"], MrightIndex * 29, 0, 29, 30, x1, y1, 60, 70);
 
                     x1 = x1 + 8;
@@ -250,14 +250,14 @@
                 }
 
                 /* evita que as personagens saiam da tela do lado direito */
-                if (rightKey && x >= W - 60) { 
+                if (rightKey && x >= W - 60 && lifesL>0) { 
                     luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, x, y, 60, 70);
 
                     rightIndex++;
                     if (rightIndex == 3)
                         rightIndex = 0;
                 }
-                if (dKey && x1 >= W - 60) {
+                if (dKey && x1 >= W - 60 && lifesM>0) {
                     mario.draw(images["marioRight"], MrightIndex * 29, 0, 29, 30, x1, y1, 60, 70);
 
                     MrightIndex++;
@@ -266,7 +266,7 @@
                 }
 
                 /* caso a tecla da esquerda ou a seja pressionada, respetivamente */
-                if (leftKey && x > 4) {
+                if (leftKey && x > 4 && lifesL>0 ) {
                     luigi.draw(images["luigiLeft"], leftIndex * 29, 0, 29, 30, x, y, 60, 70);
 
                     x = x - 8;
@@ -274,7 +274,7 @@
                     if (leftIndex == 3)
                         leftIndex = 0;
                 }
-                if (aKey && x1 > 4) {
+                if (aKey && x1 > 4 && lifesM>0) {
                     mario.draw(images["marioLeft"], MleftIndex * 29, 0, 29, 30, x1, y1, 60, 70);
 
                     x1 = x1 - 8;
@@ -283,15 +283,15 @@
                         MleftIndex = 0;
                 }
 
-                /* evita que a personagem saia da tela do lado esquerdo */
-                if (leftKey && x == 0) {
+                /* evita que as personagens saiam da tela do lado esquerdo */
+                if (leftKey && x == 0 && lifesL>0) {
                     luigi.draw(images["luigiLeft"], leftIndex * 29, 0, 29, 30, x, y, 60, 70);
 
                     leftIndex++;
                     if (leftIndex == 3)
                         leftIndex = 0;
                 }
-                if (aKey && x1 <= 0) {
+                if (aKey && x1 <= 0 && lifesM>0) {
                     mario.draw(images["marioLeft"], MleftIndex * 29, 0, 29, 30, x1, y1, 60, 70);
 
                     MleftIndex++;
@@ -375,12 +375,12 @@
                     }
 
                     if (colideLuigi) {
-                        y += 100;
+                        y += 200;
                         upKey = false
                         rightKey = false
                         leftKey = false
                     }
-                    if (y > 2000) {
+                    if (y > 4000) {
                         x = 0
                         y = H - 160
 
@@ -389,12 +389,12 @@
                     }
 
                     if (colideMario) {
-                        y1 += 100;
+                        y1 += 200;
                         wKey = false
                         aKey = false
                         dKey = false
                     }
-                    if (y1 > 2000) {
+                    if (y1 > 4000) {
                         x1 = W - 40
                         y1 = H - 160
 
@@ -406,8 +406,7 @@
                     coin.update();
                 }
             }
-            if (lifesL < 1 || lifesM < 1) {
-
+            if (lifesL < 1 && lifesM < 1) {
                 ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
                 ctx.fillStyle = "black";
                 ctx.fillRect(0, H - 50, W, H - 450);

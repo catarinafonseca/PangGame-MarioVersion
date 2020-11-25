@@ -11,6 +11,9 @@
             height: 100%;
             background: linear-gradient(rgba(94,145, 254,1)40%, rgba(200,80, 19,1) )
         }
+        svg{
+            border: 3px solid black;
+        }
         /* Animação do título para "piscar" as letras */
        /*  Retirado do seguinte link:https://loading.io/animation/text/ */
         @keyframes blink {
@@ -86,10 +89,14 @@
 
 <body>
     <!-- Audio -->
-    <audio src="images/sound.mp3" autoplay>
+    <audio src="images/sound.mp3" autoplay id='volume'>
         <p>If you are reading this, it is because your browser does not support the audio element.</p>
         <embed src="images/sound.mp3" width="180" height="90" hidden="true" />
     </audio>
+    <script>
+        let audio=document.getElementById('volume');
+        audio.volume=0.1;
+    </script>
 
     <svg xmlns="http://www.w3.org/2000/svg"
         style="margin: auto; text-align:center ; display: block; shape-rendering: auto;" width="750" height="500"

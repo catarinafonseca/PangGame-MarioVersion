@@ -16,16 +16,12 @@
         }
     </style>
 </head>
-<!-- style="background-color: black;" -->
 
 <body>
     <div style="text-align:center">
-
         <canvas id="myCanvas" width="750" height="500">
             Your browser does not support HTML5 Canvas.
-
         </canvas>
-
     </div>
     <script>
         const canvas = document.querySelector('#myCanvas');
@@ -34,8 +30,6 @@
         const W = canvas.width, H = canvas.height;
 
         let images = {};
-     
-
 
         loadImage("luigiBack");
         loadImage("luigiRight");
@@ -51,13 +45,11 @@
             images[name] = new Image();
             images[name].src = "images/" + name + ".png";
             images[name].onload = function () {
-                //only starts the animation after loading all images			
+                //a animação só começa depois de carregar todas as imagens			
             };
         }
 
-
-
-        //declaração das variáveis
+        /* ------------------------------------------------------------Variáveis------------------------------------------------------------*/
         let x = 0, y = H - 160;
         let rightKey = leftKey = upKey = enterKey = false;
         let frameIndex = 0;
@@ -65,6 +57,7 @@
         let leftIndex = 0;
         let a = 0.5;
 
+        /* ------------------------------------------------------------Classes------------------------------------------------------------*/
         class Turtle {
             constructor(turtle, turtleX, turtleY, turtleW, turtleH) {
                 this.turtle = turtle
@@ -72,26 +65,21 @@
                 this.turtleY = turtleY;
                 this.turtleW = turtleW;
                 this.turtleH = turtleH;
-
             }
             update(tX, tY) {
                 this.turtleX = tX
                 this.turtleY = tY
             }
 
-
             draw() {
                 ctx.drawImage(this.turtle, this.turtleX, this.turtleY, this.turtleW, this.turtleH)
             }
-
         }
 
         class Player {
             constructor(x, y) {
-
                 this.x = x
                 this.y = y;
-
             }
 
             draw(img, sx, sy, cx, cy, w, h) {
@@ -109,9 +97,6 @@
             }
         }
 
-
-
-        //classe da moeda
         class Coin {
             constructor(ballX, ballY, ballW, ballH, dX, dY, collisions) {
                 this.ballX = ballX;
@@ -121,42 +106,33 @@
                 this.dX = dX;
                 this.dY = dY;
                 this.collisions = collisions
-
             }
 
-            update() { //função do movimento da moeda
-
-
+            update() { //Movimento da moeda
                 if (this.ballX + this.ballW > W) {
-
                     this.dX = -this.dX;
                 }
 
                 if (this.ballX < 0) {
-
                     this.dX = -this.dX;
                 }
-
 
                 if (this.ballY + this.ballH > H - 95) {
                     this.ballY = H - this.ballH - 95;
                     this.dY = -this.dY;
-
-                }
-                else {
-                    this.dY = this.dY + a;
+                } else {
+                    this.dY = this.dY + a;//aceleração
                 }
 
                 this.ballX += this.dX;
                 this.ballY += this.dY;
-
 
                 if (this.dY < 0 && this.dY > -2.1) {
                     this.dY = 0;
                 }
             }
 
-            draw() { //desenho da moeda
+            draw() {
                 ctx.beginPath();
                 ctx.drawImage(images["coin"], frameIndex * 100, 0, 100, 100,
                     this.ballX, this.ballY, this.ballW, this.ballH);
@@ -165,10 +141,21 @@
                     frameIndex = 0;
                 ctx.closePath();
             }
-
         }
+        /* ------------------------------------------------------------Level 1------------------------------------------------------------*/
 
+        function showLevel() {
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = 'white'
+            ctx.font = 'bold 50px Arial';
+            let text = "LEVEL 1";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, W / 2, H / 2);
+        }
+        setTimeout(showLevel(), 1000)
 
+        /* ------------------------------------------------------------Render------------------------------------------------------------*/
         let xInit = W / 2;
         let yInit = 100;
         let lifes = 3
@@ -184,41 +171,23 @@
         let cArray = new Array();
         cArray.push(coin1)
 
-        function showLevel() {
+        function render() {
             ctx.clearRect(0, 0, W, H);
-            ctx.fillStyle = 'white'
-            ctx.font = 'bold 50px Arial';
-            let text = "LEVEL 1";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(text, W / 2, H / 2);
-        }
-        setTimeout(showLevel(),1000)
-
-
-        function render() { //renderização do jogo
-            //fundo preto
-            ctx.clearRect(0, 0, W, H);
-
 
             if (lifes > 0) {
-
-                //desenho do fundo e dos restantes elementos(imagens e texto)
+                //desenho do fundo 
                 ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
 
-
-
-
-                if (upKey && t1.turtleY > -1) { //caso a tecla para cima seja pressionada - mandar o arpão
-
+                /* caso a tecla para cima seja pressionada - lançar o arpão */
+                if (upKey && t1.turtleY > -1) {
                     ctx.drawImage(images["turtle"], 0, 0, 29, 30, t1.turtleX, t1.turtleY - 38, 60, 70);
                     ctx.drawImage(images["trail1"], 2, 0, 16, 100, t1.turtleX, t1.turtleY, 50, 400);
 
                     t1.turtleY -= 20;
                 }
 
-                if (t1.turtleY == 0) { //retorna o arpão à personagem
-
+                /* retorna o arpão à personagem */
+                if (t1.turtleY == 0) {
                     upKey = false
                     t1.turtleY = -1000
                     t1.turtleX = -1000
@@ -226,25 +195,24 @@
 
                 let luigi = new Player(x, y)
 
-                /*  luigi.draw(images["luigiRight"],29,30,60,70); */
-                //conjunto de funções respetivo ao movimento da personagem
-                if (!rightKey && !leftKey) { //caso nenhuma tecla de movimento seja pressionada
+               /* -----------------------Movimento da personagem-----------------------*/
 
+                /* caso nenhuma tecla de movimento seja pressionada */
+                if (!rightKey && !leftKey) {
                     luigi.draw(images["luigiBack"], 0, 0, 15, 30, 33, 70);
                 }
 
-                if (rightKey && x < W - 60) { //caso a tecla da direita seja pressionada
+                /* caso a tecla da direita seja pressionada*/
+                if (rightKey && x < W - 60) {
                     luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, 60, 70);
-
 
                     x = x + 8;
                     rightIndex++;
                     if (rightIndex == 3)
                         rightIndex = 0;
                 }
-
-                if (rightKey && x >= W - 60) { //evita que a personagem saia da tela do lado direito
-
+                /* evita que a personagem saiam da tela do lado direito */
+                if (rightKey && x >= W - 60) {
                     luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, 60, 70);
 
                     rightIndex++;
@@ -252,8 +220,8 @@
                         rightIndex = 0;
                 }
 
-                if (leftKey && x > 4) { //caso a tecla da esquerda seja pressionada
-
+                /* caso a tecla da esquerda seja pressionada*/
+                if (leftKey && x > 4) {
                     luigi.draw(images["luigiLeft"], leftIndex * 29, 0, 29, 30, 60, 70);
 
                     x = x - 8;
@@ -262,33 +230,27 @@
                         leftIndex = 0;
                 }
 
-                if (leftKey && x == 0) { //evita que a personagem saia da tela do lado esquerdo
-
+                /* evita que a personagem saia da tela do lado esquerdo */
+                if (leftKey && x == 0) {
                     luigi.draw(images["luigiLeft"], leftIndex * 29, 0, 29, 30, 60, 70);
 
                     leftIndex++;
                     if (leftIndex == 3)
                         leftIndex = 0;
                 }
-
+                /* -----------------------Vidas das personagens e colisões-----------------------*/
                 for (let i = cArray.length - 1; i >= 0; i--) {
                     const coin = cArray[i];
                     if (coin.ballX + coin.ballW - 20 < luigi.x
-                        //totally to the left: no collision
+                        //não existe colisão - totalmente à esquerda
                         || coin.ballX + 20 > luigi.x + luigi.w
-                        //totally to the right: no collision
+                        //não existe colisão - totalmente à direita
                         || coin.ballY + coin.ballH < luigi.y
-                        //totally above: no collision
+                        //não existe colisão - totalmente em cima
                         || coin.ballY > luigi.y + luigi.h) {
-
-
-
                     } else {
                         colidePlayer = true
-
                         lifes--
-
-
                     }
 
                     if (t1.turtleX + 30 >= coin.ballX && t1.turtleX <= coin.ballX + coin.ballW && t1.turtleY + 30 >= coin.ballY && t1.turtleY <= coin.ballY + coin.ballH) {
@@ -299,7 +261,6 @@
                         colide = true
                         coin.collisions++
                         console.log(coin.collisions);
-
                     }
 
                     if (colide == true && coin.collisions == 1) {
@@ -311,6 +272,7 @@
                         cArray.push(coin2)
                         colide = false
                     }
+
                     if (colide == true && coin.collisions == 2) {
                         coin.ballW = 25
                         coin.ballH = 25
@@ -320,6 +282,7 @@
                         cArray.push(coin3)
                         colide = false
                     }
+
                     if (colide == true && coin.collisions >= 3) {
                         coin.ballX = 0
                         coin.ballY = 0
@@ -328,12 +291,9 @@
                         colide = false
                     }
 
-
                     if (colidePlayer) {
-
                         y += 100;
                         upKey = false
-
                     }
 
                     if (y > 2000) {
@@ -346,12 +306,9 @@
 
                     coin.draw();
                     coin.update();
-
                 }
             }
             if (lifes < 1) {
-
-
                 ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
                 ctx.fillStyle = "black";
                 ctx.fillRect(0, H - 50, W, H - 450);
@@ -364,7 +321,6 @@
                 ctx.font = "bold 20px Arial"
                 ctx.textAlign = "center";
 
-
                 ctx.fillText(info, W / 2, H / 2 + 50);
 
                 setTimeout(function (e) {
@@ -373,15 +329,9 @@
                 }, 3000);
             }
 
-
             if (cArray.length == 4) {
                 if (cArray.every(coin => coin.collisions >= 3)) {
-
-
-
-
                     setTimeout(function () { window.location.href = './gameSingleLv2.html'; }, 1000);
-
                 }
             }
             ctx.fillStyle = "black";
@@ -389,31 +339,20 @@
 
             ctx.fillStyle = "white";
             ctx.font = "30px Courier New ";
-            
+
             let contador = 0;
 
             for (let i = 0; i < lifes; i++) {
-
                 ctx.drawImage(images["heart"], 0 + contador, H - 45, 50, 50);
                 contador += 50;
             }
             ctx.drawImage(images["floor"], 0, -455, 750, 555, 0, 0, W, H);
-
-            
         }
-       
+
         setTimeout(function () { setInterval(render, 1000 / 20); }, 4000);
-        
-        
 
-       
+        /* ------------------------------------------------------------Eventos do teclado------------------------------------------------------------*/
 
-
-
-
-
-
-        //conjunto de funções que controlam as teclas quando pressionadas e deixadas de estar pressionadas
         function ArrowPressed(e) {
             if (e.key == 'ArrowRight') {
                 rightKey = true
@@ -424,7 +363,6 @@
                 leftKey = true
                 rightKey = false
             }
-
 
             if (e.key == 'ArrowUp' && upKey == false) {
                 upKey = true
@@ -443,10 +381,7 @@
                 rightKey = false
             if (e.key == 'ArrowLeft')
                 leftKey = false
-
         }
-
-
 
         window.addEventListener('keydown', ArrowPressed)
         window.addEventListener('keyup', ArrowReleased)
