@@ -10,7 +10,6 @@
             height: 100%;
             background: linear-gradient(rgba(94, 145, 254, 1)40%, rgba(200, 80, 19, 1))
         }
-
         canvas {
             border: 3px solid black;
         }
@@ -21,7 +20,6 @@
     <div style="text-align:center">
         <canvas id="myCanvas" width="750" height="500">
             Your browser does not support HTML5 Canvas.
-
         </canvas>
     </div>
     <script>
@@ -151,7 +149,6 @@
                     frameIndex = 0;
                 ctx.closePath();
             }
-
         }
         /* ------------------------------------------------------------Level 1------------------------------------------------------------*/
 
@@ -186,34 +183,36 @@
 
         let cArray = new Array();
         cArray.push(coin1)
+
         function render() {
             ctx.clearRect(0, 0, W, H);
 
             if (lifesM > 0 || lifesL > 0) {
                 //desenho do fundo 
                 ctx.drawImage(images["bg4"], 0, 0, 750, 555, 0, 0, W + 50, H - 50);
-
-                if (upKey && t1.turtleY > -1) { //caso a tecla para cima seja pressionada - lançar o arpão
+                
+                /* caso a tecla para cima seja pressionada - lançar o arpão */
+                if (upKey && t1.turtleY > -1) { 
                     ctx.drawImage(images["turtle"], 0, 0, 29, 30, t1.turtleX, t1.turtleY - 38, 60, 70);
                     ctx.drawImage(images["trail1"], 2, 0, 16, 100, t1.turtleX, t1.turtleY, 50, 400);
 
                     t1.turtleY -= 20;
                 }
-
-                if (t1.turtleY == 0) { //retorna o arpão à personagem
-                    upKey = false
-                    t1.turtleY = -1000
-                    t1.turtleX = -1000
-                }
-
-                if (wKey && t2.turtleY > -1) { //caso a tecla w seja pressionada - lançar o arpão
+                if (wKey && t2.turtleY > -1) { 
                     ctx.drawImage(images["turtle"], 0, 0, 29, 30, t2.turtleX, t2.turtleY - 38, 60, 70);
                     ctx.drawImage(images["trail1"], 2, 0, 16, 100, t2.turtleX, t2.turtleY, 50, 400);
 
                     t2.turtleY -= 20;
                 }
 
-                if (t2.turtleY == 0) { //retorna o arpão à personagem
+                /* retorna o arpão à personagem */
+                if (t1.turtleY == 0) { //
+                    upKey = false
+                    t1.turtleY = -1000
+                    t1.turtleX = -1000
+                }
+
+                if (t2.turtleY == 0) { 
                     wKey = false
                     t2.turtleY = -1000
                     t2.turtleX = -1000
@@ -233,7 +232,7 @@
                 }
 
                 /* caso a tecla da direita ou d seja pressionada, respetivamente*/
-                if (rightKey && x < W - 60) { //
+                if (rightKey && x < W - 60) { 
                     luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, x, y, 60, 70);
 
                     x = x + 8;
@@ -251,7 +250,7 @@
                 }
 
                 /* evita que as personagens saiam da tela do lado direito */
-                if (rightKey && x >= W - 60) { //
+                if (rightKey && x >= W - 60) { 
                     luigi.draw(images["luigiRight"], rightIndex * 29, 0, 29, 30, x, y, 60, 70);
 
                     rightIndex++;
